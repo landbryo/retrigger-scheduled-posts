@@ -9,7 +9,7 @@
  */
 
 /**
- * Clear scheduler on deactivation
+ * Remove event on plugin deactivation
  */
 register_deactivation_hook( __FILE__, 'ml_pub_deactivate' );
 
@@ -29,29 +29,23 @@ if ( ! wp_next_scheduled( 'ml_pub_cron' ) ) {
  */
 function ml_pub_cron_run() {
 	global $wpdb;
-	$now = gmdate( 'Y-m-d H:i:00' );
+	global $wp_post_types;
 
-	// Support custom post types
-	$args = [
-		'public'   => true,
-		'_builtin' => false
-	];
+	$now               = gmdate( 'Y-m-d H:i:s' );
+	$post_type_names   = wp_list_pluck( $wp_post_types, 'name' );
+	$post_types_string = implode( "','", $post_type_names );
 
-	$post_types = get_post_types( $args, 'names', 'and' );
-	$str        = implode( '\',\'', $post_types );
-
-	if ( $str ) {
-		$query = $wpdb->prepare( "SELECT id FROM {$wpdb->posts} WHERE post_type IN ('post','page',%s) AND post_status = 'future' AND post_date_gmt < %s", $str, $now );
-	} else {
-		$query = $wpdb->prepare( "SELECT id FROM {$wpdb->posts} WHERE post_type IN ('post','page') AND post_status = 'future' AND post_date_gmt < %s", $now );
-	}
-
+	$query   = $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type IN ('$post_types_string') AND post_status = 'future' AND post_date_gmt < %s", $now );
 	$results = $wpdb->get_results( $query );
 
-	if ( $results ) {
-		foreach ( $results as $result ) {
-			wp_publish_post( $result->ID );
-		}
+	// Return early if no results found
+	if ( empty( $results ) ) {
+		return;
+	}
+
+	// Publish resulting posts
+	foreach ( $results as $result ) {
+		wp_publish_post( $result->ID );
 	}
 }
 
