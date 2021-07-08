@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Re-trigger Scheduled Posts
  * Description: This plugin re-triggers scheduled posts that were missed by the server's cron
- * Version: 1.0
+ * Version: 1.1
  * Author: Landon Otis - Mission Lab
  * Author URI: http://missionlab.dev
  * License: GPL3
