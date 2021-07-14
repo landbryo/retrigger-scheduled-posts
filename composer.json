@@ -1,0 +1,8 @@
+{
+  "name": "landbryo/retrigger-scheduled-posts",
+  "description": "Re-triggers scheduled posts that were missed by cron",
+  "type": "wordpress-plugin",
+  "require": {
+    "composer/installers": "~1.0"
+  }
+}
