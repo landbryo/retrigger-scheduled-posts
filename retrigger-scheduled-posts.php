@@ -1,33 +1,37 @@
 <?php
 /**
  * Plugin Name: Re-trigger Scheduled Posts
+ * Plugin URL: https://scree.it/retrigger-scheduled-posts
  * Description: Re-triggers scheduled posts that were missed by cron
- * Version: 1.1
- * Author: Landon Otis - Mission Lab
+ * Version: 1.1.1
+ * Author: Landon Otis
  * Author URI: https://github.com/landbryo/retrigger-scheduled-posts
+ * Text Domain: mlrtsp
+ * Domain Path: languages
  * License: GPL3
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
 /**
  * Remove event on plugin deactivation
  */
-register_deactivation_hook( __FILE__, 'ml_pub_deactivate' );
+register_deactivation_hook( __FILE__, 'mlrtsp_deactivate' );
 
-function ml_pub_deactivate() {
-	wp_clear_scheduled_hook( 'ml_pub_cron' );
+function mlrtsp_deactivate() {
+	wp_clear_scheduled_hook( 'mlrtsp_cron' );
 }
 
 /**
  * Schedule event if it isn't already scheduled
  */
-if ( ! wp_next_scheduled( 'ml_pub_cron' ) ) {
-	wp_schedule_event( time(), 'hourly', 'ml_pub_cron' );
+if ( ! wp_next_scheduled( 'mlrtsp_cron' ) ) {
+	wp_schedule_event( time(), 'hourly', 'mlrtsp_cron' );
 }
 
 /**
  * Check for unpublished posts hourly and publish them
  */
-function ml_pub_cron_run() {
+function mlrtsp_cron_run() {
 	global $wpdb;
 	global $wp_post_types;
 
@@ -49,4 +53,4 @@ function ml_pub_cron_run() {
 	}
 }
 
-add_action( 'ml_pub_cron', 'ml_pub_cron_run' );
+add_action( 'mlrtsp_cron', 'mlrtsp_cron_run' );
