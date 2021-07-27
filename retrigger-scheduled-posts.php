@@ -3,7 +3,7 @@
  * Plugin Name: Re-trigger Scheduled Posts
  * Plugin URL: https://scree.it/retrigger-scheduled-posts
  * Description: Re-triggers scheduled posts that were missed by cron
- * Version: 1.1.1
+ * Version: 1.1.2
  * Author: Landon Otis
  * Author URI: https://github.com/landbryo/retrigger-scheduled-posts
  * Text Domain: mlrtsp
